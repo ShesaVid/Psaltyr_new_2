@@ -18,6 +18,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.ByteArrayOutputStream;
@@ -25,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -37,6 +39,7 @@ public class PsalmyAdapter extends RecyclerView.Adapter<PsalmyAdapter.ViewHolder
     private List<PsalomDto> arrayList = new ArrayList<>();
     private SharedPreferences sharedPreferences;
     private int mKf;
+    private int selectedPosition = -1;
 
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
     private final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
@@ -46,16 +49,36 @@ public class PsalmyAdapter extends RecyclerView.Adapter<PsalmyAdapter.ViewHolder
 
     public PsalmyAdapter(Context context) {
         this.context = context;
+        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         // Ініціалізуємо кеш (наприклад, на 20 елементів)
         this.contentCache = new LruCache<>(20);
     }
 
-    public void setItems(List<PsalomDto> items, int kf) {
-        arrayList.clear();
-        arrayList.addAll(items);
-        mKf = kf;
-        contentCache.evictAll(); // Очищуємо кеш при оновленні даних
-        notifyDataSetChanged();
+    public void setItems(List<PsalomDto> newItems, int kf) {
+        final List<PsalomDto> oldItems = new ArrayList<>(this.arrayList);
+        this.mKf = kf;
+        this.contentCache.evictAll(); // Очищуємо кеш при оновленні даних
+
+        // Find the selected position
+        int np = sharedPreferences.getInt("NP", -1);
+        selectedPosition = -1;
+        if (np != -1) {
+            for (int i = 0; i < newItems.size(); i++) {
+                if (newItems.get(i).getId() == np) {
+                    selectedPosition = i;
+                    break;
+                }
+            }
+        }
+
+        executorService.execute(() -> {
+            final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new PsalomDiffCallback(oldItems, newItems));
+            mainThreadHandler.post(() -> {
+                this.arrayList.clear();
+                this.arrayList.addAll(newItems);
+                diffResult.dispatchUpdatesTo(this);
+            });
+        });
     }
 
     @NonNull
@@ -70,9 +93,8 @@ public class PsalmyAdapter extends RecyclerView.Adapter<PsalmyAdapter.ViewHolder
         PsalomDto currentItem = arrayList.get(position);
 
         // --- Логіка для RadioButton (без змін) ---
-        holder.radioButton.setOnCheckedChangeListener(null); // Важливо для уникнення багів при переробці View
-        boolean isChecked = sharedPreferences.getInt("NP", -1) == currentItem.getId();
-        holder.radioButton.setChecked(isChecked);
+        holder.radioButton.setOnCheckedChangeListener(null);
+        holder.radioButton.setChecked(position == selectedPosition);
 
         if (currentItem.getName().contains("Псалом")) {
             holder.radioButton.setVisibility(View.VISIBLE);
@@ -80,22 +102,23 @@ public class PsalmyAdapter extends RecyclerView.Adapter<PsalmyAdapter.ViewHolder
             holder.radioButton.setVisibility(View.INVISIBLE);
         }
 
-        holder.radioButton.setOnCheckedChangeListener((buttonView, isNowChecked) -> {
-            if (isNowChecked) {
+        holder.radioButton.setOnClickListener(v -> {
+            if (selectedPosition == position) {
+                // Un-check
+                selectedPosition = -1;
+                sharedPreferences.edit().putInt("NP", -1).putInt("NKF", -1).apply();
+            } else {
+                int oldSelected = selectedPosition;
+                selectedPosition = position;
                 sharedPreferences.edit()
                         .putInt("NP", currentItem.getId())
                         .putInt("NKF", mKf)
                         .apply();
-            } else {
-                // Дозволяємо "відтиснути" кнопку
-                if (sharedPreferences.getInt("NP", -1) == currentItem.getId()) {
-                    sharedPreferences.edit()
-                            .putInt("NP", -1)
-                            .putInt("NKF", -1)
-                            .apply();
+                if (oldSelected != -1) {
+                    notifyItemChanged(oldSelected);
                 }
             }
-            notifyDataSetChanged(); // Оновити всі видимі елементи
+            notifyItemChanged(position);
         });
 
         // --- Налаштування тексту ---
@@ -152,7 +175,6 @@ public class PsalmyAdapter extends RecyclerView.Adapter<PsalmyAdapter.ViewHolder
 
         public ViewHolder(View itemView) {
             super(itemView);
-            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             title = itemView.findViewById(R.id.name_psalom);
             short_desc = itemView.findViewById(R.id.short_desc);
             desc = itemView.findViewById(R.id.desc);
@@ -171,6 +193,40 @@ public class PsalmyAdapter extends RecyclerView.Adapter<PsalmyAdapter.ViewHolder
             title.setTextSize(txtSize);
             short_desc.setTextSize(txtSize);
             desc.setTextSize(txtSize);
+        }
+    }
+
+    private static class PsalomDiffCallback extends DiffUtil.Callback {
+        private final List<PsalomDto> oldList;
+        private final List<PsalomDto> newList;
+
+        public PsalomDiffCallback(List<PsalomDto> oldList, List<PsalomDto> newList) {
+            this.oldList = oldList;
+            this.newList = newList;
+        }
+
+        @Override
+        public int getOldListSize() {
+            return oldList.size();
+        }
+
+        @Override
+        public int getNewListSize() {
+            return newList.size();
+        }
+
+        @Override
+        public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+            return oldList.get(oldItemPosition).getId() == newList.get(newItemPosition).getId();
+        }
+
+        @Override
+        public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+            final PsalomDto oldItem = oldList.get(oldItemPosition);
+            final PsalomDto newItem = newList.get(newItemPosition);
+            return Objects.equals(oldItem.getName(), newItem.getName())
+                    && Objects.equals(oldItem.getShort_desc(), newItem.getShort_desc())
+                    && Objects.equals(oldItem.getDesc(), newItem.getDesc());
         }
     }
 }

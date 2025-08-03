@@ -113,19 +113,21 @@ public class AudioService extends Service implements MediaPlayer.OnPreparedListe
     public void startPlaying(String url, String title) {
         this.currentUrl = url; // Зберігаємо URL поточного треку
         this.currentTrackTitle = title;
-        if (mediaPlayer != null) {
-            mediaPlayer.release();
-        }
-        mediaPlayer = new MediaPlayer();
-        mediaPlayer.setAudioAttributes(new AudioAttributes.Builder()
-                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                .setUsage(AudioAttributes.USAGE_MEDIA)
-                .build());
-        try {
-            mediaPlayer.setDataSource(url);
+        if (mediaPlayer == null) {
+            mediaPlayer = new MediaPlayer();
+            mediaPlayer.setAudioAttributes(new AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    .setUsage(AudioAttributes.USAGE_MEDIA)
+                    .build());
             mediaPlayer.setOnPreparedListener(this);
             mediaPlayer.setOnCompletionListener(this);
             mediaPlayer.setOnErrorListener(this);
+        } else {
+            mediaPlayer.reset();
+        }
+
+        try {
+            mediaPlayer.setDataSource(url);
             mediaPlayer.prepareAsync();
         } catch (IOException e) {
             Log.e(TAG, "Error setting data source", e);
