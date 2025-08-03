@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="default_icon_color_dark">#FFFFFFFF</color>
+    <color name="night_icon_color">#008577</color>
+</resources>

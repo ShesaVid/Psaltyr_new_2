@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#000000</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#FA0202</color>
+    <color name="colorBar">#000000</color>
+    <color name="viewBg">#f1f5f8</color>
+    <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
+    <color name="red">#FF0000</color>
+    <color name="greyfon">#E2E0DC</color>
+    <color name="blue">#0000ff</color>
+    <color name="green">#00ff00</color>
+    <color name="yellow">#FFFF00</color>
+    <color name="orange">#FFA000</color>
+    <color name="red_800">#FC9696</color>
+    <color name="red_300">#ef5350</color>
+    <color name="yellow_800">#FDDB96</color>
+    <color name="night_text_v1">#bababa</color>
+    <color name="night_background_v1">#2b2b2b</color>
+    <color name="night_text_v2">#fdfeba</color>
+    <color name="night_background_v2">#21324c</color>
+
+    <color name="default_icon_color_light">#FF000000</color>
+    <color name="pressed_overlay">#22000000</color> <!-- напівпрозорий чорний для ефекту натискання -->
+</resources>

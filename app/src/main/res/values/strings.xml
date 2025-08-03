@@ -1,0 +1,104 @@
+<resources>
+    <string name="app_name">Псалтир</string>
+    <string name="large_text">
+        "«Жодна книга не прославляє Бога таким чином, як Псалтир; тому вiн особливо корисний для душi, бо в ньому Бога славлять разом з ангелами, i величають, i оспiвують величним спiвом, i ангелiв наслiдують… За допомогою Псалтиря ти можеш ублагати Бога i за самого себе…»"</string>
+    <string name="Psaltyr">ПСАЛТИР</string>
+    <string name="UPC">ПРАВОСЛАВНА ЦЕРКВА УКРАЇНИ</string>
+    <string name="David">ЦАРЯ І ПРОРОКА ДАВИДА</string>
+    <string name="Troica">На славу і честь Пресвятої, Единосущної, Животворчої і Нероздільної Тройці - Отця і Сина і Святого Духа</string>
+    <string name="Choice_Size">Розмір тексту</string>
+    <string name="Info">Інформація про застосунок</string>
+    <string name="About">Про застосунок</string>
+    <string name="Settings">Налаштування</string>
+    <string name="Text_dialog">Застосунок створений по Божій благодаті та з благословення протоієрея Миколая Храпача, настоятеля Свято-Покровського храму м.Полтава, ПЦУ. <br />За основу було взято "Псалтир" видавництва УПЦ КП, Київ 2012р. <br />У додатку присутні молитви перед початком і після читання псалиря. <br />В аудіофайлах звучить голос Миколи Козій Тимофійовича. <br />Рекомендується для повсякденного читання на славу і честь Пресвятої, Єдиносущної, Животворчої і Нероздільної Тройці - <br />Отця і Сина і Святого Духа.</string>
+    <string name="Zmist">Зміст</string>
+    <string name="Pochatok">Молитви перед початком читання псалмів</string>
+    <string name="Kafyzmy">Кафизми</string>
+    <string name="Kafyzma">Кафизма</string>
+    <string name="Number">Номера</string>
+    <string name="End">Молитви після завершення читання псалмів</string>
+    <string name="Soul">ЧИН ПІСЛЯ ВІДХОДУ ДУШІ ВІД ТІЛА</string>
+    <string name="Exit">Вихід</string>
+    <string name="Molitvi">Про те, яким чином слід співати Псалтир</string>
+    <string name="Slava">Слава Отцю і Сину, і Святому Духові.</string>
+
+    <string name="textPsalom7">Плачевна пісня Давида, яку він співав Господу з
+        приводу Хуса, сина Веніамінового.</string>
+    <string name="textPsalom17">Пісня Давида. Раба Господнього Давида,
+        який виголосив слова пісні цієї до Господа, коли Господь визволив його
+        від рук усіх ворогів його і від руки Саула. І він сказав:</string>
+    <string name="textPsalom21">Псалом Давида. (Пророцтво про страждання Ісуса Христа).</string>
+    <string name="textPsalom33">Псалом Давида, коли він прикинувся безумним перед Авимелехом,
+        який через це відпустив його.</string>
+    <string name="textPsalom45">Синів Кореєвих. На музичному інструменті аламоф. Пісня.</string>
+    <string name="textPsalom50">Псалом Давида, коли приходив до нього пророк Нафан,
+        після того, як Давид увійшов до Вирсавії. Молитва покаяння.</string>
+    <string name="textPsalom51">Повчання Давида, після того, як приходив Доїк Ідумеянин і
+        доніс Саулу, сказавши йому, що Давид прийшов у дім Авимелеха.</string>
+    <string name="textPsalom53">Повчання Давида, коли прийшли зифеї і сказали Саулу:
+        “Чи не в нас ховається Давид?”</string>
+    <string name="textPsalom55">Пісня Давида, коли филистимляни захопили його в Гефі.</string>
+    <string name="textPsalom56">Молитва Давида, коли він утік від Саула в печеру.</string>
+    <string name="textPsalom58">Молитва Давида, коли Саул послав стерегти дім його,
+        щоб умертвити його.</string>
+    <string name="textPsalom59">Псалом Давида, коли він воював з Сирією Месопотамською і з
+        Сирією Цованською, коли Іоав, повертаючись, знищив дванадцять тисяч ідумеїв у
+        долині Соляній.</string>
+    <string name="textPsalom87">Повчання Емана Езрахіта. Псалом синів Кореєвих.
+        Пісня – молитва.</string>
+    <string name="textPsalom92">Хвалебна пісня Давида. В день передсуботній, к
+        оли була населена земля.</string>
+    <string name="textPsalom101">Молитва скорботного, коли він у печалі виливає
+        перед Богом благання своє.</string>
+    <string name="textPsalom142">Псалом Давида. Молитва, коли його переслідував
+        син – Авессалом.</string>
+
+    <string name="Night_mode">увімкнути/вимкнути</string>
+    <string name="Transition_night_mode">Перехід в нічний режим</string>
+
+    <string name="url_site">https://pokrova.pl.ua</string>
+    <string name="url_site_pcy">https://www.pomisna.info/uk</string>
+    <string name="url_site_privacy_policy">https://sites.google.com/view/privacy-myapp-general</string>
+
+    <string name="size" translatable="false">size</string>
+    <string-array name="Set_string">
+        <item>16</item>
+        <item>18</item>
+        <item>20</item>
+        <item>22</item>
+        <item>24</item>
+        <item>26</item>
+        <item>28</item>
+        <item>30</item>
+    </string-array>
+    <string-array name="Set_Values">
+        <item>16</item>
+        <item>18</item>
+        <item>20</item>
+        <item>22</item>
+        <item>24</item>
+        <item>26</item>
+        <item>28</item>
+        <item>30</item>
+    </string-array>
+
+    <string name="fonts">Вибір шрифта</string>
+    <string-array name="fonts_name">
+        <item>arsenal</item>
+        <item>bebasneuepro</item>
+        <item>times_new_roman</item>
+        <item>sans_serif</item>
+        <item>triodio</item>
+        <item>izhitsa</item>
+    </string-array>
+
+    <string-array name="fonts_values">
+        <item>arsenal</item>
+        <item>bebasneuepro</item>
+        <item>times_new_roman</item>
+        <item>sans_serif</item>
+        <item>triodio</item>
+        <item>izhitsa</item>
+    </string-array>
+
+</resources>

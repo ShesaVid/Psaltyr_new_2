@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scroll_psalmy"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        tools:context=".view.PsalomActivity">
+
+        <Button
+            android:id="@+id/btn_prev_k"
+            style="@style/btn.Left"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <Button
+            android:id="@+id/btn_next_k"
+            style="@style/btn.Right"
+            android:text=""
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/main_player_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_next_k" >
+
+            <!-- 🎧 Player Section at the Top -->
+
+                    <!-- Optional Placeholder for Future Content -->
+              <LinearLayout
+                  android:id="@+id/playerSection"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical">
+
+                  <!-- SeekBar -->
+                  <SeekBar
+                      android:id="@+id/seekBar"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content" />
+
+                  <!-- Time display -->
+                  <LinearLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginTop="8dp"
+                      android:layout_marginBottom="16dp"
+                      android:orientation="horizontal">
+
+                      <TextView
+                          android:id="@+id/textCurrentTime"
+                          android:layout_width="0dp"
+                          android:layout_height="wrap_content"
+                          android:paddingStart="12dp"
+                          android:layout_weight="1"
+                          android:text="00:00"
+                          android:textSize="14sp" />
+
+                      <TextView
+                          android:id="@+id/textDuration"
+                          android:layout_width="0dp"
+                          android:layout_height="wrap_content"
+                          android:paddingEnd="12dp"
+                          android:layout_weight="1"
+                          android:gravity="end"
+                          android:text="00:00"
+                          android:textSize="14sp" />
+                  </LinearLayout>
+
+                  <!-- Control Buttons -->
+                  <LinearLayout
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:gravity="start"
+                      android:orientation="horizontal">
+
+                      <Button
+                          android:id="@+id/buttonPlayPause"
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          style="@style/btn.Volume"
+                          android:text="прослухати кафізму" />
+
+                  </LinearLayout>
+              </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView1"
+            style="@style/TextPsalmy"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/main_player_container" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_list_psalom"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="15dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView1"
+            app:layout_constraintTop_toBottomOf="@id/main_player_container" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_psalom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="7dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="6dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rv_list_psalom" />
+
+        <Button
+            android:id="@+id/btn_prev_k_b"
+            style="@style/btn.Left"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rv_psalom" />
+
+        <Button
+            android:id="@+id/btn_next_k_b"
+            style="@style/btn.Right"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rv_psalom" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            app:layout_constraintTop_toBottomOf="@+id/btn_next_k_b"
+            tools:ignore="MissingConstraints" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

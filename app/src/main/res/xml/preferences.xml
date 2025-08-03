@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:icon="@drawable/ic_text_1"
+        android:defaultValue="20"
+        android:entries="@array/Set_string"
+        android:entryValues="@array/Set_Values"
+        android:summary="%s"
+        android:key="size"
+        android:title="@string/Choice_Size">
+    </ListPreference>
+
+    <ListPreference
+        android:icon="@drawable/ic_text_2"
+        android:defaultValue="sans_serif"
+        android:entries="@array/fonts_name"
+        android:entryValues="@array/fonts_values"
+        android:key="font"
+        android:title="@string/fonts">
+    </ListPreference>
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:icon="@drawable/ic_brightness"
+        android:key="mode_night"
+        android:summary="@string/Night_mode"
+        android:title="@string/Transition_night_mode" />
+
+    <Preference
+        android:key="local_site"
+        android:icon="@drawable/ic_info"
+        android:title="Сайт Свято-Покровської Церкви"
+        android:summary="pokrova.pl.ua" >
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="@string/url_site" />
+    </Preference>
+
+    <Preference
+        android:key="global_site"
+        android:icon="@drawable/ic_info"
+        android:title="Головний сайт ПЦУ"
+        android:summary="www.pomisna.info/uk" >
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="@string/url_site_pcy" />
+    </Preference>
+
+    <Preference
+        android:key="policy_site"
+        android:icon="@drawable/ic_info"
+        android:title="Політика конфіденційності"
+        android:summary="Privacy Policy" >
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="@string/url_site_privacy_policy" />
+    </Preference>
+
+</PreferenceScreen>

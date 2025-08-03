@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    android:orientation="vertical"
+    android:screenOrientation="portrait"
+    android:fitsSystemWindows="true">
+
+    <TextView
+        android:id="@+id/t1"
+        android:text="@string/Psaltyr"
+        android:textSize="40sp"
+        android:layout_marginTop="240dp"
+        android:fontFamily="@font/cyrillic"
+        android:gravity="center"
+        android:textColor="@color/yellow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/t2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Evan_Troica"
+        android:gravity="center"
+        android:paddingTop="15dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="10dp"
+        android:text="@string/Troica"
+        android:textColor="@color/yellow" />
+
+</LinearLayout>
