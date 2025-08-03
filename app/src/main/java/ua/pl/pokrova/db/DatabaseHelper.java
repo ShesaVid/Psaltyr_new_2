@@ -57,8 +57,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public DatabaseHelper(Context context) {
         super(context, DB_NAME, null, SCHEMA);
-        this.myContext = context;
-        DB_PATH = context.getFilesDir().getPath() + DB_NAME;
+        this.myContext=context;
+        DB_PATH =context.getFilesDir().getPath() + DB_NAME;
     }
 
 
@@ -74,12 +74,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
     }
-
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public void onUpgrade(SQLiteDatabase db, int oldVersion,  int newVersion) {
     }
 
-    public void create_db() {
+    public void create_db(){
         InputStream myInput = null;
         OutputStream myOutput = null;
         try {
@@ -117,12 +116,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 myOutput.close();
                 myInput.close();
             }
-        } catch (IOException ex) {
+        }
+        catch(IOException ex){
             Log.d("DatabaseHelper", ex.getMessage());
         }
     }
-
-    public SQLiteDatabase open() throws SQLException {
+    public SQLiteDatabase open()throws SQLException {
 
         return SQLiteDatabase.openDatabase(DB_PATH, null, SQLiteDatabase.OPEN_READWRITE);
     }
@@ -147,78 +146,80 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return audioUrl;
     }
 
-    public List<KafuzmaDto> getAllKafuzm() {
-        List<KafuzmaDto> list = new ArrayList<>();
+    public List<KafuzmaDto> getAllKafuzm(){
+
+        List<KafuzmaDto> list = new ArrayList<KafuzmaDto>();
+
         String selectQuery = "SELECT  * FROM " + TABLE_KAFUZMA;
-        SQLiteDatabase db = null;
-        Cursor cursor = null;
-        try {
-            db = open();
-            cursor = db.rawQuery(selectQuery, null);
-            if (cursor.moveToFirst()) {
-                while (!cursor.isAfterLast()) {
-                    KafuzmaDto kafuzma = new KafuzmaDto();
-                    kafuzma.setId(cursor.getInt(0));
-                    kafuzma.setName(cursor.getString(1));
-                    kafuzma.setDesc(cursor.getString(2));
-                    list.add(kafuzma);
-                    cursor.moveToNext();
-                }
+
+        SQLiteDatabase db = open();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+
+            while (!cursor.isAfterLast()) {
+                KafuzmaDto kafuzma = new KafuzmaDto();
+                kafuzma.setId(cursor.getInt(0));
+                kafuzma.setName(cursor.getString(1));
+                kafuzma.setDesc(cursor.getString(2));
+
+                list.add(kafuzma);
+                cursor.moveToNext();
             }
-        } finally {
-            if (cursor != null) cursor.close();
-            if (db != null) db.close();
+
         }
+
         return list;
     }
 
-    public List<PsalomDto> getPsaloms(int id) {
+    public List<PsalomDto> getPsaloms(int id){
+
         List<PsalomDto> list = new ArrayList<>();
+
         String selectQuery = "SELECT  * FROM " + TABLE_PSALOM + " WHERE " + ID_K_PSALOM + " = " + id;
-        SQLiteDatabase db = null;
-        Cursor cursor = null;
-        try {
-            db = open();
-            cursor = db.rawQuery(selectQuery, null);
-            if (cursor.moveToFirst()) {
-                while (!cursor.isAfterLast()) {
-                    PsalomDto psalom = new PsalomDto();
-                    psalom.setId(cursor.getInt(0));
-                    psalom.setName(cursor.getString(1));
-                    psalom.setShort_desc(cursor.getString(2));
-                    psalom.setDesc(cursor.getString(3));
-                    psalom.setId_kaf(cursor.getInt(4));
-                    list.add(psalom);
-                    cursor.moveToNext();
-                }
+
+        SQLiteDatabase db = open();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+
+            while (!cursor.isAfterLast()) {
+                PsalomDto psalom = new PsalomDto();
+                psalom.setId(cursor.getInt(0));
+                psalom.setName(cursor.getString(1));
+                psalom.setShort_desc(cursor.getString(2));
+                psalom.setDesc(cursor.getString(3));
+                psalom.setId_kaf(cursor.getInt(4));
+
+                list.add(psalom);
+
+                cursor.moveToNext();
             }
-        } finally {
-            if (cursor != null) cursor.close();
-            if (db != null) db.close();
+
         }
+
         return list;
     }
 
-    public List<String> getNumbers(int id) {
+    public List<String> getNumbers(int id){
         List<String> numbersPsalom = new ArrayList<>();
+
         String selectQuery = "SELECT  * FROM " + TABLE_PSALOM + " WHERE " + ID_K_PSALOM + " = " + id;
-        SQLiteDatabase db = null;
-        Cursor cursor = null;
-        try {
-            db = open();
-            cursor = db.rawQuery(selectQuery, null);
-            if (cursor.moveToFirst()) {
-                while (!cursor.isAfterLast()) {
-                    if (cursor.getString(1).contains("Псалом")) {
-                        numbersPsalom.add(cursor.getString(1).split(" ")[1]);
-                    }
-                    cursor.moveToNext();
+
+        SQLiteDatabase db = open();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+
+            while (!cursor.isAfterLast()) {
+                if (cursor.getString(1).contains("Псалом")){
+                    numbersPsalom.add(cursor.getString(1).split(" ")[1]);
                 }
+                cursor.moveToNext();
             }
-        } finally {
-            if (cursor != null) cursor.close();
-            if (db != null) db.close();
+
         }
+
         return numbersPsalom;
     }
 }
