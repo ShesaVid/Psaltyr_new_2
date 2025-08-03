@@ -134,7 +134,6 @@ public class PsalomActivity extends AppCompatActivity implements AudioService.Se
     @Override
     protected void onRestart() {
         super.onRestart();
-        recreate();
     }
 
 
@@ -227,6 +226,7 @@ public class PsalomActivity extends AppCompatActivity implements AudioService.Se
             // Важкі операції, які виконуються у фоні
             List<PsalomDto> psaloms = databaseHelper.getPsaloms(idK);
             List<String> numbers = databaseHelper.getNumbers(idK);
+            String audioUrl = databaseHelper.getAudioUrlById(idK);
 
             // Повертаємося в головний потік, щоб оновити UI
             handler.post(() -> {
@@ -239,7 +239,6 @@ public class PsalomActivity extends AppCompatActivity implements AudioService.Se
                     updateNavigation();
                 }
 
-                String audioUrl = databaseHelper.getAudioUrlById(idK);
                 playerSection.setVisibility(audioUrl != null && !audioUrl.isEmpty() ? View.VISIBLE : View.GONE);
 
                 adapterPsalmy.setItems(psaloms, idK);
@@ -258,19 +257,25 @@ public class PsalomActivity extends AppCompatActivity implements AudioService.Se
             Toast.makeText(this, "Відсутнє підключення до Інтернету.", Toast.LENGTH_LONG).show();
             return;
         }
-        String audioUrl = databaseHelper.getAudioUrlById(idK);
-        if (audioUrl == null || audioUrl.isEmpty()) {
-            Toast.makeText(this, "Аудіо для цієї кафізми недоступне.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (!audioService.isPlayerActive() || !audioService.getCurrentUrl().equals(audioUrl)) {
-            String title = getString(R.string.Kafyzma) + " " + idK;
-            Intent serviceIntent = new Intent(this, AudioService.class);
-            ContextCompat.startForegroundService(this, serviceIntent);
-            audioService.startPlaying(audioUrl, title);
-        } else {
-            audioService.togglePlayPause();
-        }
+
+        executorService.execute(() -> {
+            String audioUrl = databaseHelper.getAudioUrlById(idK);
+
+            handler.post(() -> {
+                if (audioUrl == null || audioUrl.isEmpty()) {
+                    Toast.makeText(this, "Аудіо для цієї кафізми недоступне.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!audioService.isPlayerActive() || !audioService.getCurrentUrl().equals(audioUrl)) {
+                    String title = getString(R.string.Kafyzma) + " " + idK;
+                    Intent serviceIntent = new Intent(this, AudioService.class);
+                    ContextCompat.startForegroundService(this, serviceIntent);
+                    audioService.startPlaying(audioUrl, title);
+                } else {
+                    audioService.togglePlayPause();
+                }
+            });
+        });
     }
     private void updateUI() {
         if (!isServiceBound || audioService == null) {
