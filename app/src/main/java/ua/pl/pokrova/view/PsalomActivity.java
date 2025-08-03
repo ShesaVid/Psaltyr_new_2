@@ -258,19 +258,25 @@ public class PsalomActivity extends AppCompatActivity implements AudioService.Se
             Toast.makeText(this, "Відсутнє підключення до Інтернету.", Toast.LENGTH_LONG).show();
             return;
         }
-        String audioUrl = databaseHelper.getAudioUrlById(idK);
-        if (audioUrl == null || audioUrl.isEmpty()) {
-            Toast.makeText(this, "Аудіо для цієї кафізми недоступне.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (!audioService.isPlayerActive() || !audioService.getCurrentUrl().equals(audioUrl)) {
-            String title = getString(R.string.Kafyzma) + " " + idK;
-            Intent serviceIntent = new Intent(this, AudioService.class);
-            ContextCompat.startForegroundService(this, serviceIntent);
-            audioService.startPlaying(audioUrl, title);
-        } else {
-            audioService.togglePlayPause();
-        }
+
+        executorService.execute(() -> {
+            String audioUrl = databaseHelper.getAudioUrlById(idK);
+
+            handler.post(() -> {
+                if (audioUrl == null || audioUrl.isEmpty()) {
+                    Toast.makeText(this, "Аудіо для цієї кафізми недоступне.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!audioService.isPlayerActive() || !audioService.getCurrentUrl().equals(audioUrl)) {
+                    String title = getString(R.string.Kafyzma) + " " + idK;
+                    Intent serviceIntent = new Intent(this, AudioService.class);
+                    ContextCompat.startForegroundService(this, serviceIntent);
+                    audioService.startPlaying(audioUrl, title);
+                } else {
+                    audioService.togglePlayPause();
+                }
+            });
+        });
     }
     private void updateUI() {
         if (!isServiceBound || audioService == null) {
