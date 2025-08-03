@@ -288,17 +288,24 @@ public class PsalomActivity extends AppCompatActivity implements AudioService.Se
         updateUIForPlayback();
     }
     private void updateUIForPlayback() {
-        if (audioService.isPlaying()) {
-            playPauseBtn.setText("Пауза");
-            handler.post(updateSeekBarRunnable);
+        if (audioService.isPlayerActive()) {
+            if (audioService.isPlaying()) {
+                playPauseBtn.setText("Пауза");
+                handler.post(updateSeekBarRunnable);
+            } else {
+                playPauseBtn.setText("прослухати кафізму");
+                handler.removeCallbacks(updateSeekBarRunnable);
+            }
+            seekBar.setMax(audioService.getDuration());
+            seekBar.setProgress(audioService.getCurrentPosition());
+            durationText.setText(formatTime(audioService.getDuration()));
+            currentTimeText.setText(formatTime(audioService.getCurrentPosition()));
         } else {
             playPauseBtn.setText("прослухати кафізму");
-            handler.removeCallbacks(updateSeekBarRunnable);
+            seekBar.setProgress(0);
+            currentTimeText.setText("00:00");
+            durationText.setText("00:00");
         }
-        seekBar.setMax(audioService.getDuration());
-        seekBar.setProgress(audioService.getCurrentPosition());
-        durationText.setText(formatTime(audioService.getDuration()));
-        currentTimeText.setText(formatTime(audioService.getCurrentPosition()));
     }
     private void hideNavigation() {
         btnPrevK.setVisibility(View.GONE);
