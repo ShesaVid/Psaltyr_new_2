@@ -134,7 +134,6 @@ public class PsalomActivity extends AppCompatActivity implements AudioService.Se
     @Override
     protected void onRestart() {
         super.onRestart();
-        recreate();
     }
 
 

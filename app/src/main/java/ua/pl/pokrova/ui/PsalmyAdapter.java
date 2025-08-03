@@ -17,6 +17,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.text.PrecomputedTextCompat;
+import androidx.core.widget.TextViewCompat;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,7 +27,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -35,6 +39,7 @@ import ua.pl.pokrova.db.PsalomDto;
 
 public class PsalmyAdapter extends RecyclerView.Adapter<PsalmyAdapter.ViewHolder> {
 
+    private static final Map<String, Typeface> typefaceCache = new HashMap<>();
     private final Context context;
     private List<PsalomDto> arrayList = new ArrayList<>();
     private SharedPreferences sharedPreferences;
@@ -148,11 +153,12 @@ public class PsalmyAdapter extends RecyclerView.Adapter<PsalmyAdapter.ViewHolder
                     }
                     inputStream.close();
 
-                    final Spanned htmlContent = Html.fromHtml(result.toString("UTF-8"));
+                    final Spanned htmlContent = Html.fromHtml(result.toString("UTF-8"), Html.FROM_HTML_MODE_LEGACY);
                     contentCache.put(filePath, htmlContent); // Зберігаємо в кеш
 
                     if (holder.getAdapterPosition() == position) {
-                        mainThreadHandler.post(() -> holder.desc.setText(htmlContent));
+                        final PrecomputedTextCompat precomputedText = PrecomputedTextCompat.create(htmlContent, holder.desc.getTextMetricsParamsCompat());
+                        mainThreadHandler.post(() -> TextViewCompat.setPrecomputedText(holder.desc, precomputedText));
                     }
                 } catch (IOException e) {
                     if (holder.getAdapterPosition() == position) {
@@ -183,9 +189,17 @@ public class PsalmyAdapter extends RecyclerView.Adapter<PsalmyAdapter.ViewHolder
             // Налаштування шрифтів і розмірів можна залишити тут
             float txtSize = Float.parseFloat(sharedPreferences.getString("size", "16"));
             String appThemeFont = sharedPreferences.getString("font", "sans_serif");
-            int resourceId = context.getResources().getIdentifier(appThemeFont, "font", context.getPackageName());
-            if (resourceId != 0) {
-                Typeface typeface = ResourcesCompat.getFont(context, resourceId);
+
+            Typeface typeface = typefaceCache.get(appThemeFont);
+            if (typeface == null) {
+                int resourceId = context.getResources().getIdentifier(appThemeFont, "font", context.getPackageName());
+                if (resourceId != 0) {
+                    typeface = ResourcesCompat.getFont(context, resourceId);
+                    typefaceCache.put(appThemeFont, typeface);
+                }
+            }
+
+            if (typeface != null) {
                 title.setTypeface(typeface);
                 short_desc.setTypeface(typeface);
                 desc.setTypeface(typeface);
