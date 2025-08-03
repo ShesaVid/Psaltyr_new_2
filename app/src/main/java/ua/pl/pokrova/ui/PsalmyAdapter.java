@@ -157,10 +157,7 @@ public class PsalmyAdapter extends RecyclerView.Adapter<PsalmyAdapter.ViewHolder
                     contentCache.put(filePath, htmlContent); // Зберігаємо в кеш
 
                     if (holder.getAdapterPosition() == position) {
-                        final PrecomputedTextCompat precomputedText = PrecomputedTextCompat.create(
-                                htmlContent,
-                                TextViewCompat.getTextMetricsParams(holder.desc)
-                        );
+                        final PrecomputedTextCompat precomputedText = PrecomputedTextCompat.create(htmlContent, TextViewCompat.getTextMetricsParams(holder.desc));
                         mainThreadHandler.post(() -> TextViewCompat.setPrecomputedText(holder.desc, precomputedText));
                     }
                 } catch (IOException e) {
