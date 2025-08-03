@@ -288,23 +288,27 @@ public class PsalomActivity extends AppCompatActivity implements AudioService.Se
         updateUIForPlayback();
     }
     private void updateUIForPlayback() {
-        if (audioService.isPlayerActive()) {
-            if (audioService.isPlaying()) {
-                playPauseBtn.setText("Пауза");
-                handler.post(updateSeekBarRunnable);
+        try {
+            if (audioService.isPlayerActive()) {
+                if (audioService.isPlaying()) {
+                    playPauseBtn.setText("Пауза");
+                    handler.post(updateSeekBarRunnable);
+                } else {
+                    playPauseBtn.setText("прослухати кафізму");
+                    handler.removeCallbacks(updateSeekBarRunnable);
+                }
+                seekBar.setMax(audioService.getDuration());
+                seekBar.setProgress(audioService.getCurrentPosition());
+                durationText.setText(formatTime(audioService.getDuration()));
+                currentTimeText.setText(formatTime(audioService.getCurrentPosition()));
             } else {
                 playPauseBtn.setText("прослухати кафізму");
-                handler.removeCallbacks(updateSeekBarRunnable);
+                seekBar.setProgress(0);
+                currentTimeText.setText("00:00");
+                durationText.setText("00:00");
             }
-            seekBar.setMax(audioService.getDuration());
-            seekBar.setProgress(audioService.getCurrentPosition());
-            durationText.setText(formatTime(audioService.getDuration()));
-            currentTimeText.setText(formatTime(audioService.getCurrentPosition()));
-        } else {
-            playPauseBtn.setText("прослухати кафізму");
-            seekBar.setProgress(0);
-            currentTimeText.setText("00:00");
-            durationText.setText("00:00");
+        } catch (IllegalStateException e) {
+            // Ignore exception, it will be handled when the player is prepared
         }
     }
     private void hideNavigation() {
@@ -335,7 +339,12 @@ public class PsalomActivity extends AppCompatActivity implements AudioService.Se
     @Override public void onCompletion() {
         runOnUiThread(() -> {
             updateUI();
-            if (idK < 20) { showPsalmy(idK + 1); handlePlayPauseClick(); }
+            if (idK < 20) {
+                new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                    showPsalmy(idK + 1);
+                    handlePlayPauseClick();
+                }, 500);
+            }
         });
     }
     @Override public void onError() { runOnUiThread(() -> { Toast.makeText(this, "Помилка відтворення аудіо", Toast.LENGTH_SHORT).show(); updateUI(); }); }
