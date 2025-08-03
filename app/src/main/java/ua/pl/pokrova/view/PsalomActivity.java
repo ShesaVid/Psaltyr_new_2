@@ -288,27 +288,23 @@ public class PsalomActivity extends AppCompatActivity implements AudioService.Se
         updateUIForPlayback();
     }
     private void updateUIForPlayback() {
-        try {
-            if (audioService.isPlayerActive()) {
-                if (audioService.isPlaying()) {
-                    playPauseBtn.setText("Пауза");
-                    handler.post(updateSeekBarRunnable);
-                } else {
-                    playPauseBtn.setText("прослухати кафізму");
-                    handler.removeCallbacks(updateSeekBarRunnable);
-                }
-                seekBar.setMax(audioService.getDuration());
-                seekBar.setProgress(audioService.getCurrentPosition());
-                durationText.setText(formatTime(audioService.getDuration()));
-                currentTimeText.setText(formatTime(audioService.getCurrentPosition()));
+        if (audioService.isPlayerActive()) {
+            if (audioService.isPlaying()) {
+                playPauseBtn.setText("Пауза");
+                handler.post(updateSeekBarRunnable);
             } else {
                 playPauseBtn.setText("прослухати кафізму");
-                seekBar.setProgress(0);
-                currentTimeText.setText("00:00");
-                durationText.setText("00:00");
+                handler.removeCallbacks(updateSeekBarRunnable);
             }
-        } catch (IllegalStateException e) {
-            // Ignore exception, it will be handled when the player is prepared
+            seekBar.setMax(audioService.getDuration());
+            seekBar.setProgress(audioService.getCurrentPosition());
+            durationText.setText(formatTime(audioService.getDuration()));
+            currentTimeText.setText(formatTime(audioService.getCurrentPosition()));
+        } else {
+            playPauseBtn.setText("прослухати кафізму");
+            seekBar.setProgress(0);
+            currentTimeText.setText("00:00");
+            durationText.setText("00:00");
         }
     }
     private void hideNavigation() {

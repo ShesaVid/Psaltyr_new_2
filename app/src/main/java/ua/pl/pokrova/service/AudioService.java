@@ -26,6 +26,7 @@ public class AudioService extends Service implements MediaPlayer.OnPreparedListe
     private static final int NOTIFICATION_ID = 1;
     private static final String CHANNEL_ID = "AudioServiceChannel";
     private String currentUrl = "";
+    private boolean isPrepared = false;
 
     private MediaPlayer mediaPlayer;
     private final IBinder binder = new AudioBinder();
@@ -113,6 +114,7 @@ public class AudioService extends Service implements MediaPlayer.OnPreparedListe
     public void startPlaying(String url, String title) {
         this.currentUrl = url; // Зберігаємо URL поточного треку
         this.currentTrackTitle = title;
+        isPrepared = false;
         if (mediaPlayer == null) {
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setAudioAttributes(new AudioAttributes.Builder()
@@ -148,7 +150,7 @@ public class AudioService extends Service implements MediaPlayer.OnPreparedListe
 
     public boolean isPlayerActive() {
         // Плеєр активний, якщо він існує і не в стані помилки чи завершення
-        return mediaPlayer != null;
+        return mediaPlayer != null && isPrepared;
     }
 
     public String getCurrentUrl() {
@@ -166,15 +168,16 @@ public class AudioService extends Service implements MediaPlayer.OnPreparedListe
     }
 
     public int getCurrentPosition() {
-        return mediaPlayer != null ? mediaPlayer.getCurrentPosition() : 0;
+        return (mediaPlayer != null && isPrepared) ? mediaPlayer.getCurrentPosition() : 0;
     }
 
     public int getDuration() {
-        return mediaPlayer != null ? mediaPlayer.getDuration() : 0;
+        return (mediaPlayer != null && isPrepared) ? mediaPlayer.getDuration() : 0;
     }
 
     @Override
     public void onPrepared(MediaPlayer mp) {
+        isPrepared = true;
         mp.start();
         startForegroundService();
         if (serviceCallbacks != null) serviceCallbacks.onPrepared();
@@ -182,6 +185,7 @@ public class AudioService extends Service implements MediaPlayer.OnPreparedListe
 
     @Override
     public void onCompletion(MediaPlayer mp) {
+        isPrepared = false;
         if (serviceCallbacks != null) serviceCallbacks.onCompletion();
         stopForeground(true);
         stopSelf();
@@ -189,6 +193,7 @@ public class AudioService extends Service implements MediaPlayer.OnPreparedListe
 
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
+        isPrepared = false;
         Log.e(TAG, "MediaPlayer Error: " + what + ", " + extra);
         if (serviceCallbacks != null) serviceCallbacks.onError();
         return true; // true означає, що помилка оброблена
