@@ -227,6 +227,7 @@ public class PsalomActivity extends AppCompatActivity implements AudioService.Se
             // Важкі операції, які виконуються у фоні
             List<PsalomDto> psaloms = databaseHelper.getPsaloms(idK);
             List<String> numbers = databaseHelper.getNumbers(idK);
+            String audioUrl = databaseHelper.getAudioUrlById(idK);
 
             // Повертаємося в головний потік, щоб оновити UI
             handler.post(() -> {
@@ -239,7 +240,6 @@ public class PsalomActivity extends AppCompatActivity implements AudioService.Se
                     updateNavigation();
                 }
 
-                String audioUrl = databaseHelper.getAudioUrlById(idK);
                 playerSection.setVisibility(audioUrl != null && !audioUrl.isEmpty() ? View.VISIBLE : View.GONE);
 
                 adapterPsalmy.setItems(psaloms, idK);
