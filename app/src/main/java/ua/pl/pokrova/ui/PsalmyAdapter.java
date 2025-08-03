@@ -49,6 +49,7 @@ public class PsalmyAdapter extends RecyclerView.Adapter<PsalmyAdapter.ViewHolder
 
     public PsalmyAdapter(Context context) {
         this.context = context;
+        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         // Ініціалізуємо кеш (наприклад, на 20 елементів)
         this.contentCache = new LruCache<>(20);
     }
@@ -174,7 +175,6 @@ public class PsalmyAdapter extends RecyclerView.Adapter<PsalmyAdapter.ViewHolder
 
         public ViewHolder(View itemView) {
             super(itemView);
-            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             title = itemView.findViewById(R.id.name_psalom);
             short_desc = itemView.findViewById(R.id.short_desc);
             desc = itemView.findViewById(R.id.desc);
